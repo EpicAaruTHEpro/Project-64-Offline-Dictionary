@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image, Button, TextInput } from 'react-native';
 import AppHeader from '../components/AppHeader';
+import dictionary from '../dictionary';
 
 class HomeScreen extends React.Component {
 
@@ -17,40 +18,44 @@ class HomeScreen extends React.Component {
   }
 
   getWord = (word) => {
+    try {
     var searchKeyword = word.toLowerCase();
-    var url = "https://rupinwhitehatjr.github.io/dictionary/" + searchKeyword + ".json";
+    //var url = "https://rupinwhitehatjr.github.io/dictionary/" + searchKeyword + ".json";
     //console.log(url);
     //console.log(url);
-    return fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      var responseObject = responseJson;
-      if (responseObject.definitions !== []) {
-        var wordData = responseObject.definitions[0];
-        var definition = wordData.description;
-        var lexicalCategory = wordData.wordtype;
+    //return fetch(url)
+    //.then((response) => response.json())
+    //.then((responseJson) => {
+      //var responseObject = responseJson;
+      //if (responseObject.definitions !== []) {
+        var wordData = dictionary[word]["word"];
+        var definition = dictionary[word]["definition"];
+        var lexicalCategory = dictionary[word]["lexicalCategory"];
 
         this.setState({
           word: this.state.text,
           definition: definition,
           lexicalCategory: lexicalCategory
         })
-      }
+    }
+      //}
 
-      else {
+      catch (err) {
+        alert("Sorry, This word is not available at this time");
         this.setState({
           word: this.state.text,
           definition: "Not Found"
         })
       }
-    })
-    .catch((error) => {
+      //}
+    //})
+    /*.catch((error) => {
         console.error(error);
         this.setState({
           word: this.state.text,
           definition: "Not Found"
         })
-    });
+    });*/
   }
 
   render() {
@@ -118,4 +123,3 @@ const styles = StyleSheet.create({
 
 
 export default HomeScreen;
-
